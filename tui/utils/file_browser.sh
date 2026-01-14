@@ -13,7 +13,7 @@ file_browser() {
         
         # Üst dizin seçeneği (root değilse)
         if [ "$current_dir" != "/" ]; then
-            files+=("$index" "../")
+            files+=("$index" "../ (Üst Dizin)")
             ((index++))
         fi
         
@@ -40,13 +40,15 @@ file_browser() {
         fi
         
         # Seçim menüsünü göster
-        local choice=$(whiptail --title "$title" \
+        local choice
+        choice=$(whiptail --title "$title" \
             --menu "Dizin: $current_dir\n\nDosya seçin veya dizine girin:" \
             25 78 15 \
             "${files[@]}" \
             3>&1 1>&2 2>&3)
         
-        if [ $? -ne 0 ]; then
+        local exit_status=$?
+        if [ $exit_status -ne 0 ]; then
             return 1
         fi
         
@@ -112,13 +114,15 @@ directory_browser() {
         done < <(ls -1 "$current_dir" 2>/dev/null | sort)
         
         # Seçim menüsünü göster
-        local choice=$(whiptail --title "$title" \
+        local choice
+        choice=$(whiptail --title "$title" \
             --menu "Mevcut Dizin: $current_dir" \
             22 78 14 \
             "${dirs[@]}" \
             3>&1 1>&2 2>&3)
         
-        if [ $? -ne 0 ]; then
+        local exit_status=$?
+        if [ $exit_status -ne 0 ]; then
             return 1
         fi
         
